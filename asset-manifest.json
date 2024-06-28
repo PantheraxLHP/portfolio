@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/portfolio/static/css/main.b947e80c.css",
+    "main.js": "/portfolio/static/js/main.5e8187d1.js",
+    "static/media/home-main.jpg": "/portfolio/static/media/home-main.b15a74307303d9723ec6.jpg",
+    "static/media/car-dealer.jpg": "/portfolio/static/media/car-dealer.2eeb1c36104160692f86.jpg",
+    "static/media/about.jpg": "/portfolio/static/media/about.e5e4b17918a58e9ae073.jpg",
+    "static/media/atbm.png": "/portfolio/static/media/atbm.f205e51b6688cfd8520e.png",
+    "static/media/dental.png": "/portfolio/static/media/dental.f247be1947ee574d661b.png",
+    "static/media/pttk.png": "/portfolio/static/media/pttk.cbcf4e933caa4b314bcd.png",
+    "index.html": "/portfolio/index.html",
+    "main.b947e80c.css.map": "/portfolio/static/css/main.b947e80c.css.map",
+    "main.5e8187d1.js.map": "/portfolio/static/js/main.5e8187d1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b947e80c.css",
+    "static/js/main.5e8187d1.js"
+  ]
+}
