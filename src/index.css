@@ -1,11 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap');
-body {
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
     margin: 0;
-    font-family: 'Raleway', serif !important;
+    font-family: 'Raleway', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: linear-gradient(to left, rgb(27 20 41), rgb(20 15 35));
+    @apply bg-gradient-to-br from-dark-800 to-dark-900 text-white;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-500 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-50;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-700 hover:bg-dark-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-dark-600 focus:ring-opacity-50 border border-primary-700;
+  }
+
+  .card {
+    @apply bg-dark-800 rounded-xl shadow-lg overflow-hidden border border-dark-700 hover:border-primary-700 transition-all duration-300;
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold mb-6 relative pb-3 inline-block;
+  }
+
+  .section-heading::after {
+    content: '';
+    @apply absolute left-0 bottom-0 h-1 w-2/3 bg-gradient-to-r from-primary-500 to-primary-700;
+  }
 }

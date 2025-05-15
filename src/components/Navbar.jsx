@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../assets/about.jpg';
+import { Link, useLocation } from 'react-router-dom';
+import logo from '../assets/logo.png';
 import { CgGitFork } from 'react-icons/cg';
 import { AiFillStar, AiOutlineHome, AiOutlineFundProjectionScreen } from 'react-icons/ai';
+import { RiMenu4Line, RiCloseLine } from 'react-icons/ri';
 
 const NavBar = () => {
-  const [expand, setExpand] = useState(false);
-  const [navColour, setNavColour] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      setNavColour(window.scrollY >= 20);
+      setScrolled(window.scrollY > 20);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -19,69 +21,96 @@ const NavBar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    // Close mobile menu when route changes
+    setIsOpen(false);
+  }, [location]);
+
   return (
     <nav
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        navColour ? 'bg-emerald-900 bg-opacity-95 shadow-lg' : 'bg-emerald-900 bg-opacity-50'
+        scrolled ? 'bg-dark-800/95 backdrop-blur-md shadow-lg py-2' : 'bg-transparent py-4'
       }`}
     >
-      <div className="container mx-auto flex flex-wrap items-center justify-between py-4 px-6">
-        <Link to="/" className="flex items-center">
-          <img src={logo} className="h-8 w-auto" alt="brand" />
-        </Link>
-        <button className="text-white border-0 p-2 md:hidden" onClick={() => setExpand(!expand)}>
-          <MenuIcon expand={expand} />
-        </button>
-        <div className={`w-full md:flex md:items-center md:w-auto ${expand ? 'block' : 'hidden'}`}>
-          <NavLinks setExpand={setExpand} />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center">
+          <Link to="/" className="flex items-center space-x-2">
+            <img src={logo} className="h-10 w-10 rounded-full border-2 border-primary-500 object-cover" alt="Logo" />
+            <span className="text-xl font-bold text-white hidden sm:block">Panthera</span>
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-6">
+            {navItems.map((item, index) => (
+              <NavItem key={index} item={item} isActive={location.pathname === item.to} />
+            ))}
+            <a
+              href="https://github.com/Panthera"
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center space-x-1 px-4 py-2 rounded-lg bg-primary-600/30 border border-primary-500/40 hover:bg-primary-600/50 transition-all duration-300"
+            >
+              <CgGitFork className="text-lg" />
+              <AiFillStar className="text-lg" />
+            </a>
+          </div>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden text-2xl text-white focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <RiCloseLine /> : <RiMenu4Line />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div
+        className={`md:hidden transition-all duration-300 overflow-hidden ${
+          isOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="container mx-auto px-4 py-3 space-y-2 bg-dark-800/95 backdrop-blur-md">
+          {navItems.map((item, index) => (
+            <Link
+              key={index}
+              to={item.to}
+              className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-colors ${
+                location.pathname === item.to ? 'bg-primary-700/30 text-primary-300' : 'hover:bg-dark-700/70 text-white'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              <item.icon className="text-xl" />
+              <span>{item.label}</span>
+            </Link>
+          ))}
+          <a
+            href="https://github.com/PantheraxLHP"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center space-x-2 px-4 py-3 rounded-lg bg-primary-700/30 hover:bg-primary-700/50 transition-colors"
+          >
+            <CgGitFork className="text-xl" />
+            <span>GitHub</span>
+          </a>
         </div>
       </div>
     </nav>
   );
 };
 
-const MenuIcon = ({ expand }) => (
-  <div className="space-y-2">
-    <span
-      className={`block h-0.5 w-8 bg-white transform transition duration-300 ${
-        expand ? 'rotate-45 translate-y-2.5' : ''
-      }`}
-    ></span>
-    <span className={`block h-0.5 w-8 bg-white transition duration-300 ${expand ? 'opacity-0' : ''}`}></span>
-    <span
-      className={`block h-0.5 w-8 bg-white transform transition duration-300 ${
-        expand ? '-rotate-45 -translate-y-2.5' : ''
-      }`}
-    ></span>
-  </div>
-);
-
-const NavLinks = ({ setExpand }) => (
-  <ul className="text-white font-bold md:flex md:space-x-8 mt-3 md:mt-0">
-    {navItems.map(({ to, label, icon: Icon, external }, index) => (
-      <li key={index} className="rounded-lg hover:bg-emerald-500 transition-colors duration-300">
-        {external ? (
-          <a href={to} target="_blank" rel="noreferrer" className="block py-2 md:py-3 px-4">
-            <Icon className="inline-block mr-2" /> {label}
-          </a>
-        ) : (
-          <Link to={to} className="block py-2 md:py-3 px-4" onClick={() => setExpand(false)}>
-            <Icon className="inline-block mr-2" /> {label}
-          </Link>
-        )}
-      </li>
-    ))}
-    <li className="mt-2 md:mt-0">
-      <a
-        href="https://github.com/soumyajit4419/Portfolio"
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center justify-center bg-emerald-600 bg-opacity-40 py-2 px-5 text-center border border-transparent  hover:bg-emerald-500 hover:text-white transition-all duration-200 ease-in-out rounded-xl"
-      >
-        <CgGitFork className="text-xl" /> <AiFillStar className="text-lg ml-1" />
-      </a>
-    </li>
-  </ul>
+const NavItem = ({ item, isActive }) => (
+  <Link
+    to={item.to}
+    className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-300 ${
+      isActive ? 'bg-primary-700/30 text-primary-300' : 'hover:bg-dark-700/70 text-white'
+    }`}
+  >
+    <item.icon className="text-lg" />
+    <span>{item.label}</span>
+  </Link>
 );
 
 const navItems = [
